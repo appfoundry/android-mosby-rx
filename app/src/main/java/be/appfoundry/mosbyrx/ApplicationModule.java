@@ -6,14 +6,22 @@ import android.content.Context;
 import be.appfoundry.mosbyrx.data.service.GitHubAPI;
 import dagger.Module;
 import dagger.Provides;
-import retrofit.RestAdapter;
+import retrofit.GsonConverterFactory;
+import retrofit.Retrofit;
+import retrofit.RxJavaCallAdapterFactory;
 
 @Module
 public class ApplicationModule {
     final Application application;
+    final Retrofit retrofit;
 
     public ApplicationModule(AndroidApplication application) {
         this.application = application;
+        this.retrofit = new Retrofit.Builder()
+                .baseUrl(GitHubAPI.URI)
+                .addConverterFactory(GsonConverterFactory.create())
+                .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
+                .build();
     }
 
     @Provides
@@ -23,8 +31,7 @@ public class ApplicationModule {
 
     @Provides
     public GitHubAPI provideGitHubAPI() {
-        RestAdapter adapter = new RestAdapter.Builder().setEndpoint(GitHubAPI.URI).build();
-        return adapter.create(GitHubAPI.class);
+        return retrofit.create(GitHubAPI.class);
     }
 }
 

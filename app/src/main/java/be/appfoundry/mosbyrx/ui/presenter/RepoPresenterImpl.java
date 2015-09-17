@@ -1,5 +1,8 @@
 package be.appfoundry.mosbyrx.ui.presenter;
 
+import android.os.NetworkOnMainThreadException;
+
+import java.io.IOException;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -8,10 +11,9 @@ import be.appfoundry.mosbyrx.data.entity.GitHubRepo;
 import be.appfoundry.mosbyrx.data.service.GitHubAPI;
 import be.appfoundry.mosbyrx.ui.view.repo.RepoView;
 import be.appfoundry.mvp.mosby.BaseRxPresenter;
-import be.appfoundry.mosbyrx.retrofit.SafeCallback;
+import retrofit.Call;
 import retrofit.Callback;
-import retrofit.RetrofitError;
-import retrofit.client.Response;
+import retrofit.Response;
 import rx.Subscriber;
 
 /**
@@ -30,63 +32,38 @@ public class RepoPresenterImpl
 
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
-    public List<GitHubRepo> loadRepoListOnMainThread() {
-        /*
-            Android (in StrictMode) will keep us from being silly and will
-            throw an android.os.NetworkOnMainThreadException
-         */
-        return gitHubAPI.getReposSync();
+    /* This won't fly... */
+    @Override
+    public List<GitHubRepo> loadRepoListSynchonously() {
+        Call<List<GitHubRepo>> call = gitHubAPI.getRepos();
+        List<GitHubRepo> result = null;
+        try {
+            result = call.execute().body();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (NetworkOnMainThreadException e) {
+            // We will end up here...
+            getView().showMessage(e.toString());
+        }
+        return result;
     }
 
     @Override
-    public void loadRepoListDangerous() {
-        gitHubAPI.getReposAsync(new Callback<List<GitHubRepo>>() {
+    public void loadRepoListAsynchonously() {
+        Call<List<GitHubRepo>> call = gitHubAPI.getRepos();
+        call.enqueue(new Callback<List<GitHubRepo>>() {
             @Override
-            public void success(List<GitHubRepo> gitHubRepos, Response response) {
-                getView().showRepos(gitHubRepos);
-                getView().hideLoadingIndicator();
-            }
-
-            @Override
-            public void failure(RetrofitError e) {
-                getView().showMessage(e.getMessage());
-                getView().hideLoadingIndicator();
-            }
-        });
-    }
-
-    @Override
-    public void loadRepoListLessDangerous() {
-        gitHubAPI.getReposAsync(new SafeCallback<List<GitHubRepo>>() {
-            @Override
-            public void safeSuccess(List<GitHubRepo> gitHubRepos, Response response) {
-                getView().showRepos(gitHubRepos);
-                getView().hideLoadingIndicator();
-            }
-
-            @Override
-            public void safeFailure(RetrofitError e) {
-                getView().showMessage(e.getMessage());
-                getView().hideLoadingIndicator();
-            }
-        });
-    }
-
-    @Override
-    public void loadRepoListSafer() {
-        gitHubAPI.getReposAsync(new Callback<List<GitHubRepo>>() {
-            @Override
-            public void success(List<GitHubRepo> gitHubRepos, Response response) {
+            public void onResponse(Response<List<GitHubRepo>> response) {
                 if (isViewAttached()) {
-                    getView().showRepos(gitHubRepos);
+                    getView().showRepos(response.body());
                     getView().hideLoadingIndicator();
                 }
             }
 
             @Override
-            public void failure(RetrofitError e) {
+            public void onFailure(Throwable t) {
                 if (isViewAttached()) {
-                    getView().showMessage(e.getMessage());
+                    getView().showMessage(t.getMessage());
                     getView().hideLoadingIndicator();
                 }
             }
@@ -94,7 +71,7 @@ public class RepoPresenterImpl
     }
 
     @Override
-    public void loadRepoList() {
+    public void loadRepoListRx() {
         new RxIOSubscription<List<GitHubRepo>>().add(
                 gitHubAPI.getReposRx(),
                 new Subscriber<List<GitHubRepo>>() {

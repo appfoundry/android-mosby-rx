@@ -119,24 +119,24 @@ public class RepoActivity
     ////////////////////////////////////////////////////////////////////////////////////////////////
 
     void loadData(boolean isRefresh) {
-        Toast.makeText(this, "RxPresenter", Toast.LENGTH_SHORT).show();
-        getPresenter().loadRepoList();
+        Toast.makeText(this, "Rx Observable", Toast.LENGTH_SHORT).show();
+        getPresenter().loadRepoListRx();
         if (!isRefresh) {
             contentView.setRefreshing(true);
         }
     }
 
     void loadDataDangerously(boolean isRefresh) {
-        Toast.makeText(this, "Unprotected Callback", Toast.LENGTH_SHORT).show();
-        getPresenter().loadRepoListDangerous();
+        Toast.makeText(this, "Synchronous", Toast.LENGTH_SHORT).show();
+        getPresenter().loadRepoListSynchonously();
         if (!isRefresh) {
             contentView.setRefreshing(true);
         }
     }
 
     void loadDataLessDangerously(boolean isRefresh) {
-        Toast.makeText(this, "Safeguarded Callback", Toast.LENGTH_SHORT).show();
-        getPresenter().loadRepoListLessDangerous();
+        Toast.makeText(this, "Asynchronous Callback", Toast.LENGTH_SHORT).show();
+        getPresenter().loadRepoListAsynchonously();
         if (!isRefresh) {
             contentView.setRefreshing(true);
         }

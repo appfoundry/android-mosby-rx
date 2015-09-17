@@ -2,6 +2,7 @@ package be.appfoundry.mosbyrx.data.service;
 
 import java.util.List;
 
+import retrofit.Call;
 import retrofit.Callback;
 import retrofit.http.GET;
 import rx.Observable;
@@ -13,12 +14,11 @@ import be.appfoundry.mosbyrx.data.entity.GitHubRepo;
 public interface GitHubAPI {
     String URI = "https://api.github.com";
 
+    // Synchronous and Asynchronous
     @GET("/users/google/repos")
-    List<GitHubRepo> getReposSync();
+    Call<List<GitHubRepo>> getRepos();
 
-    @GET("/users/google/repos")
-    void getReposAsync(Callback<List<GitHubRepo>> result);
-
+    // Rx
     @GET("/users/google/repos")
     Observable<List<GitHubRepo>> getReposRx();
 }

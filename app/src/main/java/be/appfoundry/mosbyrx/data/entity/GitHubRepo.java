@@ -1,18 +1,17 @@
 package be.appfoundry.mosbyrx.data.entity;
 
-import com.google.gson.annotations.SerializedName;
 
 /**
  * Created by janvancoppenolle on 31/08/15.
  */
 public class GitHubRepo {
-    @SerializedName("name")
+    // @SerializedName("name")
     String name;
 
-    @SerializedName("html_url")
+    // @SerializedName("html_url")
     String url;
 
-    @SerializedName("description")
+    // @SerializedName("description")
     String description;
 
     public GitHubRepo() {

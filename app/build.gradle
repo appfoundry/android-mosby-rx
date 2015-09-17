@@ -47,6 +47,8 @@ dependencies {
     compile rootProject.ext.libraries.javax_inject
     compile rootProject.ext.libraries.mosby
     compile rootProject.ext.libraries.retrofit
+    compile rootProject.ext.libraries.retrofit_gson_converter
+    compile rootProject.ext.libraries.retrofit_rx_adapter
     compile rootProject.ext.libraries.rxandroid
     compile rootProject.ext.libraries.rxjava
     compile rootProject.ext.libraries.timber

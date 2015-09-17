@@ -14,8 +14,8 @@ ext {
     icepick_version                 = "3.1.0"
     javax_inject_annotation_version = "10.0-b28"    // needed for Dagger
     mosby_version                   = "2.0.0"
-    retrofit_version                = "1.9.0"
-    rxandroid_version               = "0.24.0"
+    retrofit_version                = "2.0.0-beta1"
+    rxandroid_version               = "1.0.1"
     rxjava_version                  = "1.0.8"
     timber_version                  = "2.5.0"
 
@@ -36,6 +36,8 @@ ext.libraries = [
         javax_inject            : "org.glassfish:javax.annotation:$javax_inject_annotation_version",
         mosby                   : "com.hannesdorfmann.mosby:mvp:$mosby_version",
         retrofit                : "com.squareup.retrofit:retrofit:$retrofit_version",
+        retrofit_gson_converter : "com.squareup.retrofit:converter-gson:$retrofit_version",
+        retrofit_rx_adapter     : "com.squareup.retrofit:adapter-rxjava:$retrofit_version",
         rxandroid               : "io.reactivex:rxandroid:$rxandroid_version",
         rxjava                  : "io.reactivex:rxjava:$rxjava_version",
         timber                  : "com.jakewharton.timber:timber:$timber_version",
