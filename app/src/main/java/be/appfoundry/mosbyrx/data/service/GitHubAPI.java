@@ -14,7 +14,7 @@ import be.appfoundry.mosbyrx.data.entity.GitHubRepo;
 public interface GitHubAPI {
     String URI = "https://api.github.com";
 
-    // Synchronous and Asynchronous
+    // Both Synchronous and Asynchronous
     @GET("/users/google/repos")
     Call<List<GitHubRepo>> getRepos();
 

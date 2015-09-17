@@ -5,13 +5,8 @@ package be.appfoundry.mosbyrx.data.entity;
  * Created by janvancoppenolle on 31/08/15.
  */
 public class GitHubRepo {
-    // @SerializedName("name")
     String name;
-
-    // @SerializedName("html_url")
-    String url;
-
-    // @SerializedName("description")
+    String html_url;
     String description;
 
     public GitHubRepo() {
@@ -26,11 +21,11 @@ public class GitHubRepo {
     }
 
     public String getUrl() {
-        return url;
+        return html_url;
     }
 
     public void setUrl(String url) {
-        this.url = url;
+        this.html_url = url;
     }
 
     public String getDescription() {
